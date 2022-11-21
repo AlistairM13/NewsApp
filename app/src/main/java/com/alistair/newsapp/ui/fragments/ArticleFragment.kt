@@ -12,6 +12,7 @@ import com.alistair.newsapp.databinding.FragmentArticleBinding
 import com.alistair.newsapp.databinding.FragmentBreakingNewsBinding
 import com.alistair.newsapp.ui.NewsActivity
 import com.alistair.newsapp.ui.NewsViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class ArticleFragment : Fragment() {
@@ -38,6 +39,12 @@ class ArticleFragment : Fragment() {
             webViewClient = WebViewClient()
             loadUrl(article.url)
         }
+
+        binding.fab.setOnClickListener {
+            viewModel.saveArticle(article)
+            Snackbar.make(view, "Article saved successfully", Snackbar.LENGTH_SHORT).show()
+        }
+
     }
 
     override fun onDestroyView() {
