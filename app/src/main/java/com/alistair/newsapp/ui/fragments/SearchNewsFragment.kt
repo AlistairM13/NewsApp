@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alistair.newsapp.R
 import com.alistair.newsapp.adapters.NewsAdapter
@@ -42,11 +43,20 @@ class SearchNewsFragment : Fragment() {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply{
+                putSerializable("article",it)
+            }
+            findNavController().navigate(
+                R.id.action_searchNewsFragment_to_articleFragment, bundle
+            )
+        }
+
         var job: Job? = null
         binding.etSearch.addTextChangedListener { editable->
             job?.cancel()
             job = MainScope().launch {
-                delay(SEARCH_NEWS_TIME_DELAY)
+                delay(SEARCH_NEWS_TIME_DELAY)   // to delay searching so that you dont make requests for every letter entered
 
                 editable?.let{
                     if(editable.toString().isNotEmpty()){
